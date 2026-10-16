@@ -74,6 +74,17 @@ func main() {
 			words[i] = ""
 			siok = false
 		}
+
+		case "a" , "A":
+		if i+1  < len(words) {
+			if ucl.Verifvoyelleouh(words[i+1]) {
+				if words[i] == "A"{
+					words[i] = "An"
+				}else{
+					words[i] = "an"
+				}
+			}
+		}
 	}
 
 	// Création d'une nouvelle boucle afin de pouvoir corrigée l'index (à plus touchée)
