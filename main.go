@@ -17,6 +17,7 @@ func main() {
 	}
 	words := strings.Fields(string(data))
 
+	siok := false
 	for i := 0; i < len(words); i++{
 
 		switch words[i]{
@@ -52,15 +53,27 @@ func main() {
 		}
 	// permet de régler les probleme de ponctuation 
 		case ",", ".", "!", "?", "...":
-		corection := i - 1
-		for corection >= 0 && words[corection] == "" {
-			corection--
+		corectionponc := i - 1
+		for corectionponc >= 0 && words[corectionponc] == "" {
+			corectionponc--
 		}
 		if i >= 0 {
-			words[corection] = ucl.Ponctuation(words[corection], words[i])
+			words[corectionponc] = ucl.Ponctuation(words[corectionponc], words[i])
 			words[i] = ""
 		}
-
+	// permet de Coller les ' ' autour du ou des mots encadrés
+		case "'" :
+		
+		if siok == false {
+			words[i+1] = "'" + words[i+1]
+			words[i] = ""
+			siok = true
+		}else{
+		
+			words[i-1] = words[i-1] + "'"
+			words[i] = ""
+			siok = false
+		}
 	}
 
 	// Création d'une nouvelle boucle afin de pouvoir corrigée l'index (à plus touchée)
