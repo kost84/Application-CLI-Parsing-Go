@@ -99,7 +99,7 @@ if len(os.Args) < 2  {
 			chiffre, err := strconv.Atoi(doubletextmajuscule)
 			if err == nil {
 				lettremodifier := 0
-				for j := i; j >= 0 && lettremodifier < chiffre; j-- {
+				for j := i-1; j >= 0 && lettremodifier < chiffre; j-- {
 					if words[j] != "" {
 						if words[i] == "(up,"{
 							words[j] = ucl.Upper(words[j])
@@ -112,6 +112,8 @@ if len(os.Args) < 2  {
 					}
 				}
 			}
+			words[i] = ""
+			words[i+1] = ""
 		}
 	}
 }
