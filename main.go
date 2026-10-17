@@ -4,20 +4,27 @@ import (
 	ucl "app/src"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func main() {
-	if len(os.Args) < 2  {
+
+if len(os.Args) < 2  {
 		os.Exit(1)
 	}	
 	data, err := os.ReadFile(os.Args[1])
 	if err != nil{
 		return
 	}
-	words := strings.Fields(string(data))
+	ligne := strings.Split(string(data), "\n")
+	var findeligne []string
+
+	for _, passageligne := range ligne {
+		words := strings.Fields(passageligne)
 
 	siok := false
+
 	for i := 0; i < len(words); i++{
 
 		switch words[i]{
@@ -57,7 +64,7 @@ func main() {
 		for corectionponc >= 0 && words[corectionponc] == "" {
 			corectionponc--
 		}
-		if i >= 0 {
+		if corectionponc >= 0 {
 			words[corectionponc] = ucl.Ponctuation(words[corectionponc], words[i])
 			words[i] = ""
 		}
@@ -74,7 +81,7 @@ func main() {
 			words[i] = ""
 			siok = false
 		}
-
+	// permet de changer A ----> An Devant une voyelle ou un h
 		case "a" , "A":
 		if i+1  < len(words) {
 			if ucl.Verifvoyelleouh(words[i+1]) {
@@ -85,7 +92,29 @@ func main() {
 				}
 			}
 		}
+	// 	permet de changer 2 mot en même temps tout en prenant en compte Upper , Capitalize , Lower 
+		case "(up,", "(low,", "(cap,":
+		if i+1 < len(words) {
+			doubletextmajuscule := strings.TrimSuffix(words[i+1], ")")
+			chiffre, err := strconv.Atoi(doubletextmajuscule)
+			if err == nil {
+				lettremodifier := 0
+				for j := i; j >= 0 && lettremodifier < chiffre; j-- {
+					if words[j] != "" {
+						if words[i] == "(up,"{
+							words[j] = ucl.Upper(words[j])
+						}else if words[i] == "(low,"{
+							words[j] = ucl.Low(words[j]) 
+						}else if words[i] == "(cap," {
+							words[j] = ucl.Capitalize(words[j])
+						}
+						lettremodifier++
+					}
+				}
+			}
+		}
 	}
+}
 
 	// Création d'une nouvelle boucle afin de pouvoir corrigée l'index (à plus touchée)
 	var indexcorrigée []string
@@ -95,15 +124,16 @@ func main() {
 			indexcorrigée = append(indexcorrigée, words[i])
 		}
 	}
-	// permet l'écriture de result après le passage de chaque fonction 
-		result := strings.Join(indexcorrigée, " " ) 
+	result := strings.Join(indexcorrigée, " " ) 
 		result = strings.TrimSpace(result)	
+		findeligne = append(findeligne, result)
+	}	
 
-			err = os.WriteFile("result.txt", []byte(result), 0644)
+	finalresult := strings.Join(findeligne, "\n")
+	err = os.WriteFile("result.txt", []byte(finalresult), 0644)
 				if err 	!= nil {
 					fmt.Println("Erreur d'écriture ", err)
 					return
 				}
 			}
-		}	
-	
+		
