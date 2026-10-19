@@ -29,7 +29,7 @@ if len(os.Args) < 2  {
 
 		switch words[i]{
     // permet à capitalize de fonctioner
-		case "(cap)" : 
+		case "(cap)": 
 		if i > 0 {
 			words[i-1] = ucl.Capitalize(words[i-1])
 			words[i] = ""
@@ -59,7 +59,7 @@ if len(os.Args) < 2  {
 			words[i] = ""
 		}
 	// permet de régler les probleme de ponctuation 
-		case ",", ".", "!", "?", "...":
+		case ",", ".", "!", "?", "...", "!!":
 		corectionponc := i - 1
 		for corectionponc >= 0 && words[corectionponc] == "" {
 			corectionponc--
@@ -76,8 +76,13 @@ if len(os.Args) < 2  {
 			words[i] = ""
 			siok = true
 		}else{
-		
-			words[i-1] = words[i-1] + "'"
+			corectionapo := i -1
+			for corectionapo >= 0 && words[corectionapo] == "'" {
+				corectionapo--
+			}
+			if corectionapo >= 0 {
+				words[corectionapo] = words[corectionapo] + "'"
+			}
 			words[i] = ""
 			siok = false
 		}
@@ -115,6 +120,7 @@ if len(os.Args) < 2  {
 			words[i] = ""
 			words[i+1] = ""
 		}
+		
 	}
 }
 

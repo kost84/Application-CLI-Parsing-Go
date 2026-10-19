@@ -33,3 +33,4 @@ func Bin(word string)string {
 	}
 	return word
 }
+
