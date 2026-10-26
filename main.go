@@ -124,7 +124,7 @@ if len(os.Args) < 2  {
 	}
 }
 
-	// Création d'une nouvelle boucle afin de pouvoir corrigée l'index (à plus touchée)
+	// Création d'une nouvelle boucle afin de pouvoir corrigée l'index (à ne plus touchée)
 	var indexcorrigée []string
 
 	for i := 0; i < len(words); i++{
